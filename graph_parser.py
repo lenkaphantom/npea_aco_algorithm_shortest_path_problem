@@ -65,14 +65,19 @@ def calculate_distances(graph):
     """
     for node_id, data in graph.items():
         x1, y1 = data['coords']
-        for neighbour_id in data['neighbours']:
+        for neighbour_id in list(data['neighbours']):
             if neighbour_id in graph:
                 x2, y2 = graph[neighbour_id]['coords']
                 dist = euclidean_distance(x1, y1, x2, y2)
+                if dist == 0:
+                    print(f"Warning: skipping zero-distance edge {node_id} <-> {neighbour_id}")
+                    del data['neighbours'][neighbour_id]
+                    continue
                 data['neighbours'][neighbour_id] = dist
             else:
                 print(f"Warning: neighbor {neighbour_id} of {node_id} not found in graph.")
     return graph
+
 
 
 def get_distance_dict(graph):
@@ -91,6 +96,18 @@ def get_distance_dict(graph):
             if dist is not None:
                 distances[(node_id, neighbour_id)] = dist
     return distances
+
+
+def make_graph_bidirectional(graph):
+    """
+    Makes the graph bidirectional by adding edges in both directions.
+    """
+    for node_id, data in graph.items():
+        for neighbor_id in list(data['neighbours']):
+            if neighbor_id in graph:
+                graph[neighbor_id]['neighbours'][node_id] = graph[node_id]['neighbours'][neighbor_id]
+                
+    return graph
 
 
 if __name__ == "__main__":

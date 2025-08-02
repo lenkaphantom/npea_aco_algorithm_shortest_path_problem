@@ -18,7 +18,7 @@ class Ant:
         total = 0.0
 
         for neighbor in neighbors:
-            if neighbor not in self.visited:
+            if len(self.path) < 2 or neighbor != self.path[-2]:
                 pheromone = self.pheromones[current_node][neighbor]
                 distance = self.distances[(current_node, neighbor)]
                 prob = (pheromone ** self.alpha) * ((1.0 / distance) ** self.beta)
@@ -38,20 +38,27 @@ class Ant:
         return probabilities[-1][0]
 
     def find_path(self, start, end):
-        self.path = [start]
-        self.visited = {start}
-        current = start
+        max_attempts = 10  # broj pokušaja pre odustajanja
+        for _ in range(max_attempts):
+            self.path = [start]
+            self.visited = {start}
+            self.total_cost = 0.0
+            current = start
 
-        while current != end:
-            next_node = self.select_next_node(current)
-            if next_node is None:
-                return None
-            self.path.append(next_node)
-            self.visited.add(next_node)
-            self.total_cost += self.distances[(current, next_node)]
-            current = next_node
+            while current != end:
+                next_node = self.select_next_node(current)
+                if next_node is None:
+                    break  # ćorsokak — restartovaćemo
+                self.path.append(next_node)
+                self.visited.add(next_node)
+                self.total_cost += self.distances[(current, next_node)]
+                current = next_node
 
-        return self.path
+            if current == end:
+                return self.path  # uspešan pokušaj
+
+        return None  # nijedan pokušaj nije uspeo
+
 
 class AntColonyOptimization:
     def __init__(self, graph, distances, num_ants=10, num_iterations=100, alpha=1.0, beta=5.0,
