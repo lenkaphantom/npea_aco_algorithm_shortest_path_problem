@@ -4,9 +4,9 @@ The nodes and their neighbors are loaded from a file (data_path_nodes.txt), wher
 The goal is to find the shortest path from a given start node to a destination node using a nature-inspired, probabilistic search strategy.
 
 project structure:
-├── main.py
-├── graph_parser.py
-├── aco.py
-├── data/
-│   └── data_path_nodes.txt
-└── README.md
+├─ main.py
+├─ graph_parser.py
+├─ aco.py
+├─ data/
+│   └─ data_path_nodes.txt
+└─ README.md
