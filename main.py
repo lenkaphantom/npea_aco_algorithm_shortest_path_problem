@@ -1,53 +1,36 @@
 from graph_parser import *
 from aco import AntColonyOptimization
-from collections import deque
-
-
-def is_reachable(graph, start, end):
-    visited = set()
-    queue = deque([start])
-    
-    while queue:
-        node = queue.popleft()
-        if node == end:
-            return True
-        visited.add(node)
-        for neighbor in graph[node]["neighbours"]:
-            if neighbor not in visited and neighbor in graph:
-                queue.append(neighbor)
-    return False
-
 
 if __name__ == "__main__":
+    # Učitaj i pripremi graf
     graph = parse_graph("data/data_path_nodes.txt")
-    graph = make_graph_bidirectional(graph)
-    graph = calculate_distances(graph) 
+    graph = calculate_distances(graph)
     distances = get_distance_dict(graph)
 
     start = "3653296222"
     end = "3653134376"
     
-    print("Start node in graph:", start in graph)
-    print("End node in graph:", end in graph)
-
+    print(f"Graph loaded: {len(graph)} nodes")
+    print(f"Searching path from {start} to {end}")
+    
+    # Kreiraj i pokreni ACO
     aco = AntColonyOptimization(
         graph, distances,
-        num_ants=20,
-        num_iterations=100,
-        alpha=1.0,
+        num_ants=25,
+        num_iterations=50,
+        alpha=1.5,
         beta=3.0,
-        evaporation_rate=0.5,
-        pheromone_deposit=100
+        evaporation_rate=0.1,
+        pheromone_deposit=50
     )
-
-    best_path, best_cost = aco.run(start, end)
     
-    if not is_reachable(graph, start, end):
-        print(f"No path exists between {start} and {end}.")
-        exit(1)
+    print("\nRunning ACO...")
+    best_path, best_cost = aco.run(start, end)
 
     if best_path:
-        print(f"Best path found: {' -> '.join(best_path)}")
-        print(f"Total cost: {best_cost}")
+        print(f"\nSUCCESS!")
+        print(f"Best path length: {len(best_path)} nodes")
+        print(f"Total cost: {best_cost:.2f}")
+        print(f"Path sample: {' -> '.join(best_path[:10])}...")
     else:
-        print("No path found.")
+        print("\nFAILED: No path found.")

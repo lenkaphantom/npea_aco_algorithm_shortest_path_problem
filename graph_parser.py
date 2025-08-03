@@ -69,10 +69,6 @@ def calculate_distances(graph):
             if neighbour_id in graph:
                 x2, y2 = graph[neighbour_id]['coords']
                 dist = euclidean_distance(x1, y1, x2, y2)
-                if dist == 0:
-                    print(f"Warning: skipping zero-distance edge {node_id} <-> {neighbour_id}")
-                    del data['neighbours'][neighbour_id]
-                    continue
                 data['neighbours'][neighbour_id] = dist
             else:
                 print(f"Warning: neighbor {neighbour_id} of {node_id} not found in graph.")
