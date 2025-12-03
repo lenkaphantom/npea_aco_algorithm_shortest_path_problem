@@ -1,9 +1,9 @@
-## 🐜 Ant Colony Optimization – Shortest Path Solver
+# 🐜 Ant Colony Optimization – Shortest Path Solver
 
 This project implements an Ant Colony Optimization (ACO) algorithm to solve the Shortest Path Problem in a 2D graph.
 Nodes and adjacency information are loaded from a file, and the algorithm uses a nature-inspired, probabilistic approach to iteratively converge toward the optimal route between two points.
 
-📌 Features
+### 📌 Features
 - ACO-based pathfinding inspired by real ant foraging behavior
 - Graph loaded from text file (data_path_nodes.txt)
 - Automatic edge weight calculation using Euclidean distance
